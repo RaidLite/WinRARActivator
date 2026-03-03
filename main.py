@@ -1,25 +1,35 @@
 import os
 import shutil
+import sys
 
-def activate(d):
-    path = os.path.join(d, 'rarreg.key')
+PATH_WinRAR = r'C:\Program Files\WinRAR'
+KEY_FILE = 'rarreg.key'
+
+def activate(dir):
+    path = os.path.join(dir, KEY_FILE)
     if os.path.isfile(path):
-        v = input('Файл существует. Перезаписать? [y/n] >>> ').lower()
-        if v != 'y': return print('Отказ от записи')
-        try: os.remove(path)
-        except: return print('Нужны права админа')
+        if input('Файл существует. Перезаписать? [y/n] >>> ').lower() != 'y':
+            return print('Отказ от записи')
+        try:
+            os.remove(path)
+        except:
+            return print('Нужны права админа')
 
     try:
-        shutil.move('rarreg.key', d)
+        shutil.copy(KEY_FILE, dir)
         print('WinRAR успешно активирован')
-    except: print('Ошибка активации (права админа или файл не найден)')
+    except:
+        print('Ошибка активации (права админа или файл не найден)')
 
 def main():
     while True:
-        print("1. Activate WinRAR")
         print(" ")
-        match input('>>> '):
-            case 1: activate('C:\Program Files\WinRAR')
+        print("1. Activate WinRAR")
+        print("0. Exit")
+        print(" ")
+        match int(input('>>> ')):
+            case 1: activate(PATH_WinRAR)
+            case 0: sys.exit(0)
 
 if __name__ == '__main__':
     main()
